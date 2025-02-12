@@ -1,0 +1,45 @@
+:root {
+    --primary: #5865F2;
+    --secondary: #57F287;
+    --background: #0B0E11;
+}
+
+body {
+    background: var(--background);
+    color: #fff;
+    font-family: 'Tajawal', sans-serif;
+}
+
+header {
+    padding: 1rem;
+    text-align: left;
+}
+
+#discordLink {
+    background: var(--primary);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1.1em;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.product-card {
+    background: #1E2124;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #36393F;
+}
+
+.orderBtn {
+    background: var(--secondary);
+    color: #000;
+    width: 100%;
+    padding: 12px;
+    margin-top: 1rem;
+}

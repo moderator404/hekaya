@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <title>متجر المنتجات</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            color: white;
+            font-family: Arial;
+        }
+        .alert {
+            background: #ED4245;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            display: none;
+        }
+        button {
+            background: #5865F2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .products {
+            display: grid;
+            gap: 20px;
+            padding: 20px;
+        }
+        .product {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="alertBox" class="alert"></div>
+    
+    <button id="discordLink">🔗 ربط الديسكورد</button>
+
+    <div class="products">
+        <!-- المنتج 1 -->
+        <div class="product">
+            <h3>تست - 100 كريدت</h3>
+            <button class="orderBtn" data-product="test">طلب المنتج</button>
+        </div>
+        <!-- المنتج 2 -->
+        <div class="product">
+            <h3>تجربة - 200 كريدت</h3>
+            <button class="orderBtn" data-product="trial">طلب المنتج</button>
+        </div>
+    </div>
+
+    <script>
+        // ─── عرض التنبيهات ───
+        function showAlert(message) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
+
+        // ─── ربط الديسكورد ───
+        document.getElementById('discordLink').addEventListener('click', () => {
+            window.location.href = 'https://discord.com/oauth2/authorize?client_id=1339288650541826078&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fcallback&scope=identify+email+guilds+guilds.join';
+        });
+
+        // ─── معالجة الطلبات ───
+        document.querySelectorAll('.orderBtn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                if (!localStorage.getItem('discordToken')) {
+                    showAlert('❗ يرجى ربط حساب الديسكورد أولاً');
+                    return;
+                }
+                
+                // إرسال الطلب إلى الخادم
+                try {
+                    const response = await fetch('/api/order', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('discordToken')}`
+                        }
+                    });
+                    const result = await response.json();
+                    if (result.success) showAlert('✅ تم إرسال طلبك بنجاح');
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
